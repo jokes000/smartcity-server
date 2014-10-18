@@ -94,6 +94,21 @@
             <param-value>127.0.0.1</param-value>
         </init-param>
     </servlet>
+    
+    <servlet>
+		<servlet-name>restSdkService</servlet-name>
+		<servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+  		<init-param>
+ 			<param-name>propertiesLocation</param-name>
+ 			<param-value>/WEB-INF/wink-properties.properties</param-value>
+ 		</init-param>	 
+
+ 		<init-param>
+ 			<param-name>javax.ws.rs.Application</param-name>
+ 			<param-value>cn.edu.sjtu.dclab.warrantydemo.application.WarrantyRestApplication</param-value>
+ 		</init-param>
+	 </servlet>
+	    
     <!-- end of servlets -->
 
     <!-- servlet mappings -->
@@ -105,6 +120,11 @@
         <servlet-name>DruidStatView</servlet-name>
         <url-pattern>/druid/*</url-pattern>
     </servlet-mapping>
+    	<servlet-mapping>
+		<servlet-name>restSdkService</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+    
     <!-- end of servlet mappings -->
 
     <!-- listeners -->
