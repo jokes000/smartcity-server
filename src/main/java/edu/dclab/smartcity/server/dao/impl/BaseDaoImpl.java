@@ -15,11 +15,22 @@ import org.springframework.stereotype.Repository;
 
 import edu.dclab.smartcity.server.dao.IBaseDao;
 
-@Repository("BaseDao")
+@Repository("baseDao")
 public class BaseDaoImpl<T extends Serializable> implements IBaseDao<T> {
 	
 	@Resource(name = "sessionFactory")
 	private SessionFactory sf;
+	
+	public BaseDaoImpl() {
+	}
+	
+    public SessionFactory getSessionFactory() {
+        return sf;
+    }
+
+    public void setSessionFactory(SessionFactory sf) {
+        this.sf = sf;
+    }
 	
 	public Session getSession() {
 		return sf.getCurrentSession();
@@ -31,6 +42,7 @@ public class BaseDaoImpl<T extends Serializable> implements IBaseDao<T> {
 	
 	public void update(T t) {
 		getSession().update(t);
+		//getSession().flush();
 	}
 	
 	public void deleteById(Class<T> clazz, long id) {

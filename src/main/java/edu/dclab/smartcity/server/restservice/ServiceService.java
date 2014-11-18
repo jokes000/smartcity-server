@@ -1,6 +1,9 @@
 package edu.dclab.smartcity.server.restservice;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -18,42 +21,108 @@ import javax.ws.rs.core.UriInfo;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.dclab.smartcity.server.entity.*;
+import edu.dclab.smartcity.server.dao.*;
+import edu.dclab.smartcity.server.dao.impl.*;
 
+import javax.annotation.Resource;
+
+@Service("smartcityservice")
 @Path("/service")
+@Transactional
 public class ServiceService {
-	
-	private static ServiceService instance;
-	
-	private ServiceService() {
-
-	}
-	
-	public static ServiceService getInstance() {
-		if (instance == null) {
-			instance = new ServiceService();
-		}
-		return instance;
-	}
-	
 		
+	public ServiceService() {
+	}
+	
+    @Resource(name = "baseDao")
+    private IBaseDao<CustomService> baseDao;
+
+	public IBaseDao<CustomService> getBaseDao() {
+		return baseDao;
+	}
+
+	public void setBaseDao(IBaseDao<CustomService> baseDao) {
+		this.baseDao = baseDao;
+	}		
 	
 	@Path("/list")
 	@GET
 	//@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
 	@Produces({ MediaType.APPLICATION_JSON })
-	public JSONObject get()
+	public JSONArray list()
 			throws Exception {
-		
-		CustomService result = new CustomService();
-		result.setName("name");
-		result.setId(11);
-		result.setImage("image");
-		result.setUrl("url");
-		
-		return (JSONObject)toJson(result);
+		List<CustomService> list = this.baseDao.queryAll(CustomService.class);
+		ArrayList<CustomService> newList = new ArrayList<CustomService>();
+		for (CustomService cs : list) {
+			if (cs.getUser_id() != 0) {
+				newList.add(cs);
+			}
+		}
+		return (JSONArray)toJson(newList);
 	}
+	
+	@Path("/available")
+	@GET
+	//@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
+	@Produces({ MediaType.APPLICATION_JSON })
+	public JSONArray available()
+			throws Exception {
+		List<CustomService> list = this.baseDao.queryAll(CustomService.class);
+		ArrayList<CustomService> newList = new ArrayList<CustomService>();
+		for (CustomService cs : list) {
+			if (cs.getUser_id() == 0) {
+				newList.add(cs);
+			}
+		}
+		return (JSONArray)toJson(newList);
+	}
+	
+	@Path("/add/{csId}")
+	@GET
+	//@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
+	@Produces({ MediaType.APPLICATION_JSON })
+	public JSONObject add(@PathParam("csId") long csId)
+			throws Exception {
+		CustomService cs = this.baseDao.queryById(CustomService.class, csId);
+		if (cs == null) {
+			JSONObject jObject = new JSONObject();
+			jObject.put("status", "object not found");
+			return jObject;
+		}
+		cs.setUser_id(1);
+		this.baseDao.update(cs);
+		JSONObject jObject = new JSONObject();
+		jObject.put("status", "success");
+		return jObject;
+
+	}
+	
+	@Path("/remove/{csId}")
+	@GET
+	//@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
+	@Produces({ MediaType.APPLICATION_JSON })
+	public JSONObject remove(@PathParam("csId") long csId)
+			throws Exception {
+		CustomService cs = this.baseDao.queryById(CustomService.class, csId);
+		if (cs == null) {
+			JSONObject jObject = new JSONObject();
+			jObject.put("status", "object not found");
+			return jObject;
+		}
+		cs.setUser_id(0);
+		this.baseDao.update(cs);
+		JSONObject jObject = new JSONObject();
+		jObject.put("status", "success");
+		return jObject;
+
+	}
+
+
+
 	
 	/*
 	@Path("/{resourceType}")

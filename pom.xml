@@ -344,6 +344,11 @@
 	    	<type>jar</type>
 	    	<scope>compile</scope>
 	    </dependency>
+        <dependency>
+			<groupId>org.apache.wink</groupId>
+			<artifactId>wink-spring-support</artifactId>
+			<version>1.4</version>
+		</dependency>
         
     </dependencies>
     <build>

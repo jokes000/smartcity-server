@@ -86,4 +86,12 @@
 
     <tx:annotation-driven transaction-manager="transactionManager" />
 
+	<bean class="org.apache.wink.spring.Registrar">
+	    <property name="instances">
+	        <set>
+	            <ref bean="smartcityservice" />
+	        </set>
+	    </property>
+	</bean>
+	
 </beans>

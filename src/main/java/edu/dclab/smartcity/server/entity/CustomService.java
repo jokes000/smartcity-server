@@ -25,6 +25,28 @@ public class CustomService implements java.io.Serializable {
 	
 	@Column
 	private String image;
+	
+	@Column
+	private long user_id;
+	
+	@Column
+	private String description;
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public long getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(long user_id) {
+		this.user_id = user_id;
+	}
 
 	public long getId() {
 		return id;

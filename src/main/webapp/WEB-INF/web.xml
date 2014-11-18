@@ -11,6 +11,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             classpath*:applicationContext-core.xml
+            classpath:META-INF/server/wink-core-context.xml
             <!--
             classpath*:applicationContext-shiro.xml
             -->
@@ -28,7 +29,7 @@
         <param-name>spring.profiles.default</param-name>
         <param-value>production</param-value>
     </context-param>
-
+    
     <session-config>
         <session-timeout>20</session-timeout>
     </session-config>
@@ -99,10 +100,6 @@
 		<servlet-name>restSdkService</servlet-name>
 		<servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
 
- 		<init-param>
- 			<param-name>javax.ws.rs.Application</param-name>
- 			<param-value>edu.dclab.smartcity.server.restservice.RestApplication</param-value>
- 		</init-param>
 	 </servlet>
 	    
     <!-- end of servlets -->
